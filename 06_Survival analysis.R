@@ -33,9 +33,6 @@ colnames(row3)<-c('PVT1')
 row4<-t(as.data.frame(sexpr[ '1557098_s_at', ]))
 colnames(row4)<-c('HAR1A')
 
-row5<-as.data.frame(c(rep('1',50)))
-colnames(row5)<-c('status')
-
 surv<-cbind(row2,row3,row4)
 
 surv$PVT1_status<-as.factor(ifelse(surv$PVT1<mean(surv$PVT1),'Low PVT1 expression',
