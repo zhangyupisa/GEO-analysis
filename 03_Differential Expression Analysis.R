@@ -22,6 +22,7 @@ head(design)
 
 contrast.matrix<-makeContrasts(paste0(unique(group_list),collapse = "-"),levels = design)
 contrast.matrix #这个矩阵声明，我们要把gbm组跟normal组进行差异分析比较
+#将A与B进行比较，此处A的值为1，B的值为-1。A与B和group_list有关，A是group_list为1的，B是group_list为0的
 
 ##-------------------
 #差异分析
