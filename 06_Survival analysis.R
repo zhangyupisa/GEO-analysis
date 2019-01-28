@@ -3,26 +3,26 @@
 #06_Survival analysis
 
 ##--------------------------------------------------
-#按SOP的步骤从GSE中获取所需数据
+#Get data needed from GEO
 library(GEOquery)
 library(openxlsx)
 sset = getGEO(filename="./GSE43378_series_matrix.txt.gz",AnnotGPL=T)
 #"s" denotes survive 
 sexpr<-read.xlsx("GSE43378_series_matrix.xlsx",sheet=1,rowNames = TRUE,colNames = TRUE)
-dim(sexpr)#50个样本
+dim(sexpr)#50 samples
 
 sdata<-pData(sset)
-#第46列记录了survival time
+#survival time is recorded in line No.46
 colnames(sdata)[46]<-c("survival time")
 colnames(sdata)[2]<-c('ID')
 
 ##--------------------------------------------------
-#获取surv对象
+#Creatr survival object
 library(survival)
 library(dplyr)
 library(survminer)
 
-#根据lncRNA.xlsx中的数据，PVT1与HAR1A对应的ID分别为1558290_a_at，1557098_s_at。
+#According to file lncRNA.xlsx, PVT1 and HAR1A' IDs are 1558290_a_at,1557098_s_at.
 
 row2<-as.data.frame(as.numeric(sdata[,46]))
 colnames(row2)<-c("time")
@@ -41,11 +41,11 @@ surv$HAR1A_status<-as.factor(ifelse(surv$HAR1A<mean(surv$HAR1A),'Low HAR1A expre
                                     'High HAR1A expression'))
 status<-as.factor(ifelse(sdata$characteristics_ch1.6=="outcome: ALIVE",0,1))
 surv$status<-as.numeric(status)
-#1表示存活，2表示死亡
+#1 denotes survive, 2 denotes dead
 surv
 
 ##--------------------------------------------------
-#绘制生存曲线
+#Draw Kaplan-Meier survival curve
 s_PVT1 <- Surv(time = surv$time, event = surv$status)
 km1<-survfit(s_PVT1~PVT1_status,data = surv)
 s1<-ggsurvplot(km1,legend =c(0.78,0.91), 
