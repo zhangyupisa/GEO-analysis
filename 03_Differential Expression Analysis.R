@@ -3,29 +3,27 @@
 #03_Differential Expression Analysis
 
 ##-------------------
-#分组矩阵
+#Grouping matrix
 
 library(limma)
 
 load('expr_grouplist.Rdata')
 
-#仅对expr进行差异分析
 design <- model.matrix(~0+factor(group_list))
 colnames(design)=levels(factor(group_list))
 length(group_list)
 rownames(design)=colnames(expr)
 head(design)
-#design是分组矩阵，记录每个样本的分组情况
 
-##-------------------
-#差异比较矩阵
+##------------------
+#Differential comparation matrix
 
 contrast.matrix<-makeContrasts(paste0(unique(group_list),collapse = "-"),levels = design)
-contrast.matrix #这个矩阵声明，我们要把gbm组跟normal组进行差异分析比较
-#将A与B进行比较，此处A的值为1，B的值为-1。A与B和group_list有关，A是group_list为1的，B是group_list为0的
+contrast.matrix #The matrix compares gbm with normal. When comparing group A with group B, A=1, B=-1. In "group_list",A=1, B=0.
+
 
 ##-------------------
-#差异分析
+#Differential analysis
 
 #step1
 fit <- lmFit(expr,design)
